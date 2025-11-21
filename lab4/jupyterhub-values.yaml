@@ -1,0 +1,43 @@
+proxy:
+  secretToken: "2e498634d455141f419a50061553ffefabe0e006f7565649080fa82b8a618780"
+  service:
+    type: ClusterIP
+
+# DÉSACTIVER l'ingress de JupyterHub - nous utilisons votre proxy Nginx existant
+ingress:
+  enabled: false
+
+hub:
+  config:
+    JupyterHub:
+      authenticator_class: dummy
+    DummyAuthenticator:
+      password: "admin123"
+    Authenticator:
+      admin_users:
+        - admin
+  db:
+    type: sqlite-pvc
+    pvc:
+      storageClassName: microk8s-hostpath
+  # Désactiver networkPolicy au niveau hub
+  networkPolicy:
+    enabled: false
+
+singleuser:
+  image:
+    name: jupyter/datascience-notebook
+    tag: latest
+  defaultUrl: "/lab"
+  storage:
+    type: dynamic
+    dynamic:
+      storageClass: microk8s-hostpath
+  # Désactiver networkPolicy au niveau singleuser
+  networkPolicy:
+    enabled: false
+
+cull:
+  enabled: true
+  timeout: 3600
+  every: 300
