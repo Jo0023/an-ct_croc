@@ -1,0 +1,43 @@
+replicaCount: 1
+
+image:
+  repository: localhost:32000/vector-app
+  tag: "1.0.0"
+  pullPolicy: Always  # IMPORTANT: forcer le repull
+
+service:
+  type: ClusterIP
+  port: 8000
+
+ingress:
+  enabled: true
+  className: "public"
+  host: vector-app.k8s.labs.itmo.loc
+  tls:
+    secretName: k8s-tls-secret
+
+env:
+  redisHost: "redis-master"
+  redisPort: 6379
+  qdrantHost: "qdrant"
+  qdrantPort: 6333
+
+resources:
+  requests:
+    memory: "128Mi"
+    cpu: "100m"
+  limits:
+    memory: "256Mi"
+    cpu: "200m"
+
+livenessProbe:
+  path: /health
+  port: 8000
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+readinessProbe:
+  path: /health
+  port: 8000
+  initialDelaySeconds: 5
+  periodSeconds: 5
