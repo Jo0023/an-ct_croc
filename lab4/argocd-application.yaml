@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: demo-guestbook
+  name: vector-app-tp4
   namespace: argocd
 spec:
   project: default
   source:
-    repoURL: https://github.com/argoproj/argocd-example-apps
-    path: guestbook
-    targetRevision: HEAD
+    repoURL: https://github.com/Jo0023/an-ct_croc.git
+    path: manifests
+    targetRevision: main
   destination:
     server: https://kubernetes.default.svc
     namespace: default
